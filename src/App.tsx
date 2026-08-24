@@ -7,7 +7,7 @@ const EXT_COLORS = {
   sh: "var(--accent-green)",
 };
 
-function FileBadge({ ext }) {
+function FileBadge({ ext }: { ext: keyof typeof EXT_COLORS }) {
   return (
     <span className="file-badge" style={{ color: EXT_COLORS[ext] }}>
       {ext}
@@ -20,9 +20,19 @@ const TABS = [
   { id: "projects", label: "projects.js", ext: "js", lang: "JavaScript" },
   { id: "skills", label: "skills.json", ext: "json", lang: "JSON" },
   { id: "contact", label: "contact.sh", ext: "sh", lang: "Shell" },
-];
+] as const;
 
-function Line({ n, children, delay = 0, animate }) {
+function Line({
+  n,
+  children,
+  delay = 0,
+  animate,
+}: {
+  n: number;
+  children: React.ReactNode;
+  delay?: number;
+  animate?: boolean;
+}) {
   return (
     <div
       className="code-line"
@@ -34,7 +44,7 @@ function Line({ n, children, delay = 0, animate }) {
   );
 }
 
-function AboutContent({ animate }) {
+function AboutContent({ animate }: { animate?: boolean }) {
   const lines = [
     <span className="syn-comment"># whoami</span>,
     null,
@@ -84,10 +94,10 @@ const PROJECTS = [
   },
 ];
 
-function ProjectsContent({ animate }) {
+function ProjectsContent({ animate }: { animate?: boolean }) {
   let n = 0;
-  const rows = [];
-  const pushLine = (content) => {
+  const rows: React.ReactNode[] = [];
+  const pushLine = (content: React.ReactNode) => {
     n += 1;
     rows.push(
       <Line key={n} n={n} delay={n * 40} animate={animate}>
@@ -164,11 +174,11 @@ const SKILLS = {
   learning: ["TypeScript", "Node.js"],
 };
 
-function SkillsContent({ animate }) {
-  const keys = Object.keys(SKILLS);
+function SkillsContent({ animate }: { animate?: boolean }) {
+  const keys = Object.keys(SKILLS) as (keyof typeof SKILLS)[];
   let n = 0;
-  const rows = [];
-  const pushLine = (content) => {
+  const rows: React.ReactNode[] = [];
+  const pushLine = (content: React.ReactNode) => {
     n += 1;
     rows.push(
       <Line key={n} n={n} delay={n * 40} animate={animate}>
@@ -208,7 +218,7 @@ function SkillsContent({ animate }) {
   return <div className="code-block">{rows}</div>;
 }
 
-function ContactContent({ animate }) {
+function ContactContent({ animate }: { animate?: boolean }) {
   const lines = [
     <span className="syn-comment">#!/bin/bash</span>,
     null,
@@ -256,7 +266,7 @@ export default function App() {
     mounted.current = true;
   }, []);
 
-  const activeMeta = TABS.find((t) => t.id === activeTab);
+  const activeMeta = TABS.find((t) => t.id === activeTab) ?? TABS[0];
 
   const renderContent = () => {
     switch (activeTab) {
