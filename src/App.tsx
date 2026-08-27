@@ -7,6 +7,28 @@ const EXT_COLORS = {
   sh: "var(--accent-green)",
 };
 
+function ProfileHeader() {
+  const [imgError, setImgError] = useState(false);
+  return (
+    <div className="profile-row">
+      {imgError ? (
+        <div className="avatar avatar-fallback">A</div>
+      ) : (
+        <img
+          src="/avatar.jpg"
+          alt="Asin"
+          className="avatar"
+          onError={() => setImgError(true)}
+        />
+      )}
+      <div>
+        <div className="profile-name">Asin</div>
+        <div className="profile-role">BCA · 1st year</div>
+      </div>
+    </div>
+  );
+}
+
 function FileBadge({ ext }: { ext: keyof typeof EXT_COLORS }) {
   return (
     <span className="file-badge" style={{ color: EXT_COLORS[ext] }}>
@@ -378,6 +400,42 @@ export default function App() {
           color: var(--text-faint);
           padding: 0 16px 10px;
         }
+        .profile-row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 0 16px 14px;
+          margin-bottom: 10px;
+          border-bottom: 1px solid var(--border-subtle);
+        }
+        .avatar {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 1px solid var(--border);
+          flex-shrink: 0;
+        }
+        .avatar-fallback {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--bg-elevated);
+          color: var(--accent-blue);
+          font-family: 'JetBrains Mono', monospace;
+          font-weight: 700;
+          font-size: 14px;
+        }
+        .profile-name {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 12.5px;
+          color: var(--text);
+        }
+        .profile-role {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 10.5px;
+          color: var(--text-faint);
+        }
         .folder-row {
           display: flex;
           align-items: center;
@@ -614,6 +672,7 @@ export default function App() {
           </button>
 
           <div className={`mobile-drawer ${sidebarOpen ? "open" : ""}`}>
+            <ProfileHeader />
             {TABS.map((t) => (
               <button
                 key={t.id}
@@ -632,6 +691,7 @@ export default function App() {
 
         <div className="editor-body">
           <aside className="sidebar">
+            <ProfileHeader />
             <div className="sidebar-label">EXPLORER</div>
             <div className="folder-row">
               <span>▾</span>
